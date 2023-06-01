@@ -4,8 +4,8 @@ apply plugin: 'maven-publish'
 group = 'com.github.jitpack'
 version = '2.0'
 
-sourceCompatibility = 1.8 // java 8
-targetCompatibility = 1.8
+sourceCompatibility = 11 // java 8
+targetCompatibility = 11
 
 repositories {
   mavenCentral()
@@ -13,11 +13,11 @@ repositories {
 
 dependencies {
   implementation 'com.google.guava:guava:29.0-jre'
+  implementation 'org.apache.spark:spark-sql_2.12:3.0.0'
 }
 
 java {
 	withSourcesJar()
-	withJavadocJar()
 }
 
 publishing {

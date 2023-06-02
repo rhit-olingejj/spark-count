@@ -55,8 +55,8 @@ public class pso {
         // 1.input parameter
         dataset_path = WinePath;
         num_iter = 50;
-        num_k = 10;
-        num_run = 400;
+        num_k = 100;
+        num_run = 5;
         num_particle = 10;
         learning_c1 = 0.05;
         learning_c2 = 0.1;
@@ -64,7 +64,8 @@ public class pso {
         w_min = 0.7;
 
         // 2.start spark
-        SparkConf conf = new SparkConf();
+        //TODO: Set up master with workers so actually parrelizes from ubuntu and doesn't just execute on main executer
+        SparkConf conf = new SparkConf().setMaster("");
         sc = new JavaSparkContext(conf);
 
         // 3.read dataset,set output

@@ -64,8 +64,8 @@ public class pso {
         w_min = 0.7;
 
         // 2.start spark
-        //TODO: Set up master with workers so actually parrelizes from ubuntu and doesn't just execute on main executer
-        SparkConf conf = new SparkConf().setMaster("");
+        SparkConf conf = new SparkConf().setMaster("spark://127.0.0.1:7077");
+        conf.setAppName("pso");
         sc = new JavaSparkContext(conf);
 
         // 3.read dataset,set output

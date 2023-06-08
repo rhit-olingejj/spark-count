@@ -70,7 +70,7 @@ public class pso {
         w_min = 0.7;
 
         // 2.start spark
-        SparkConf conf = new SparkConf().setMaster("spark://127.0.0.1:7077");
+        SparkConf conf = new SparkConf().setMaster("spark://spark.cs.ndsu.edu:7077");
         conf.setAppName("pso");
 //        conf.set("spark.ego.uname","jacob.olinger");
 //        conf.set("spark.ego.passwd", "Orang3crayon");
@@ -85,17 +85,7 @@ public class pso {
         for( int run=0; run<num_run; run++ )
         {
             best_objectvalue = Double.MAX_VALUE;
-            ThreadFactory fac = Thread.ofVirtual().name("dot-", 0).factory();
-            try(var executor = Executors.newThreadPerTaskExecutor(fac)){
-                IntStream.range(0, 4 + 1)
-                        .forEach(i -> executor.submit(() -> {
-                            try {
-                                start();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }));
-            }
+            start();
         }
         fw.write( System.currentTimeMillis() - total_t + "ms" );
         fw.flush();

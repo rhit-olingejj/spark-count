@@ -4,25 +4,13 @@ apply plugin: 'maven-publish'
 group = 'com.github.olingejj'
 version = '2.0'
 
-sourceCompatibility = 20 // java 20
-targetCompatibility = 20
+sourceCompatibility = 11 // java 8
+targetCompatibility = 11
 
 repositories {
   mavenCentral()
 }
-tasks.withType(JavaCompile).each {
-    it.options.compilerArgs.add('--enable-preview')
-}
-// JavaExec tasks need to have the JVM argument --enable-preview.
-tasks.withType(JavaExec) {
-    jvmArgs.add('--enable-preview')
-}
-apply plugin: 'java'
-jar {
-    manifest {
-        attributes 'Main': 'Main'
-    }
-}
+
 dependencies {
   implementation 'com.google.guava:guava:29.0-jre'
   implementation 'org.apache.spark:spark-sql_2.12:3.0.0'
@@ -41,6 +29,6 @@ publishing {
 }
 
 wrapper {
-    gradleVersion = "8.1.1"
+    gradleVersion = "7.3.3"
     distributionType = Wrapper.DistributionType.ALL
 }

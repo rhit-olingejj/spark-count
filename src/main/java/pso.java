@@ -3,6 +3,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.stream.IntStream;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.*;
@@ -12,6 +15,9 @@ import org.apache.spark.broadcast.Broadcast;
 import scala.Tuple2;
 import scala.Tuple3;
 import scala.Tuple5;
+
+import static com.sun.activation.registries.LogSupport.log;
+
 //Taken from https://github.com/vkmouse/Spark_clustering/blob/master/src/main/java/edu/nchu/app/pso.java
 public class pso {
     public static final String WinePath = "DataSets/wine.txt";
@@ -66,6 +72,9 @@ public class pso {
         // 2.start spark
         SparkConf conf = new SparkConf().setMaster("spark://127.0.0.1:7077");
         conf.setAppName("pso");
+//        conf.set("spark.ego.uname","jacob.olinger");
+//        conf.set("spark.ego.passwd", "Orang3crayon");
+        System.out.println(conf.toDebugString());
         sc = new JavaSparkContext(conf);
 
         // 3.read dataset,set output
@@ -76,7 +85,17 @@ public class pso {
         for( int run=0; run<num_run; run++ )
         {
             best_objectvalue = Double.MAX_VALUE;
-            start();
+            ThreadFactory fac = Thread.ofVirtual().name("dot-", 0).factory();
+            try(var executor = Executors.newThreadPerTaskExecutor(fac)){
+                IntStream.range(0, 4 + 1)
+                        .forEach(i -> executor.submit(() -> {
+                            try {
+                                start();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }));
+            }
         }
         fw.write( System.currentTimeMillis() - total_t + "ms" );
         fw.flush();
